@@ -2,6 +2,8 @@
 #
 # use : python3 fancontrol.py [-v]
 # otion -v print out every time slice the duty cycle of the fan, temperature and frequency clock of the CPU
+# you can modify the output pin used for controlling FAN (default 18)
+# time interval of the monitoring feature (default 5 sec)
 #
 # references
 # https://howchoo.com/g/ote2mjkzzta/control-raspberry-pi-fan-temperature-python#write-the-fan-controller-code-optional
@@ -45,6 +47,7 @@ def get_cpu_clock():
 
 #===============================================================================
 # return duty cycle in temperature function
+# new duty cycle = (Tcpu - 25°C) * 3
 #===============================================================================
 def get_duty(temp):
     deltaT = temp - 25
