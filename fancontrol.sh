@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 ### BEGIN INIT INFO
 # Provides:          fancontrol.py
@@ -12,7 +12,7 @@
 case "$1" in
   start)
     echo "Starting fancontrol.py"
-    /usr/local/bin/fancontrol.py &
+    sudo python3 /usr/local/bin/fancontrol.py &
     ;;
   stop)
     echo "Stopping fancontrol.py"
