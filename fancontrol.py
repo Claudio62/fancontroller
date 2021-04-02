@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-#  https://howchoo.com/g/ote2mjkzzta/control-raspberry-pi-fan-temperature-python#write-the-fan-controller-code-optional
-
-#  https://it.howtodogood.com/90734-PWM-Regulated-Fan-Based-on-CPU-Temperature-for-Ras-80#menu-4
-
+#
+# use : python3 fancontrol.py [-v]
+# otion -v print out every time slice the duty cycle of the fan, temperature and frequency clock of the CPU
+#
+# references
+# https://howchoo.com/g/ote2mjkzzta/control-raspberry-pi-fan-temperature-python#write-the-fan-controller-code-optional
+# https://it.howtodogood.com/90734-PWM-Regulated-Fan-Based-on-CPU-Temperature-for-Ras-80#menu-4
 # https://www.instructables.com/PWM-Regulated-Fan-Based-on-CPU-Temperature-for-Ras/
-
 # http://raspi.tv/2013/rpi-gpio-0-5-2a-now-has-software-pwm-how-to-use-it
 
 import RPi.GPIO as GPIO # always needed with RPi.GPIO  
@@ -24,7 +26,6 @@ VERBOUSE       = 0
 def get_temp():
     output = subprocess.run(['vcgencmd', 'measure_temp'], capture_output=True)
     temp_str = output.stdout.decode()
-    
     try:
         return float(temp_str.split('=')[1].split('\'')[0])
     except (IndexError, ValueError):
