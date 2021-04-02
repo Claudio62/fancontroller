@@ -15,12 +15,27 @@ import RPi.GPIO as GPIO # always needed with RPi.GPIO
 import subprocess
 import time
 import sys
+import signal
 
 SLEEP_INTERVAL = 5      # (seconds) How often we check the core temperature.
 FAN_GPIO_PIN   = 18     #  17  # Which GPIO pin you're using to control the fan.
 FAN_PWM_FREQ   = 50     # 50 Hz
 FAN_PWM_DUTY   = 50     # duty cycle default 50%
-VERBOUSE       = 0   
+VERBOUSE       = 0
+
+
+
+#===============================================================================
+# manage SIGTERM to correct exit from script
+#===============================================================================
+class GracefulKiller:
+  kill_now = False
+  def __init__(self):
+    signal.signal(signal.SIGINT, self.exit_gracefully)
+    signal.signal(signal.SIGTERM, self.exit_gracefully)
+
+  def exit_gracefully(self,signum, frame):
+    self.kill_now = True
 
 #===============================================================================
 # return CPU temperature
@@ -69,8 +84,10 @@ if __name__ == '__main__':
     if (arguments !=0 and (sys.argv[1] == '-v')):   # verbouse
         VERBOUSE = 1
         
+        
+    killer = GracefulKiller()        
+
     GPIO.setwarnings(False)
-    
     GPIO.setmode(GPIO.BCM)                  # choose BCM or BOARD numbering schemes. I use BCM  
 
     GPIO.setup(FAN_GPIO_PIN, GPIO.OUT)      # set GPIO 18 as an output. You can use any GPIO port  
@@ -80,8 +97,10 @@ if __name__ == '__main__':
                                             # different names for each port   
                                             # e.g. p1, p2, motor, servo1 etc.  
     p.start(FAN_PWM_DUTY)                   # start the PWM on 50 percent duty cycle  
-                                            # duty cycle value can be 0.0 to 100.0%, floats are OK  
-    while True:
+                                            # duty cycle value can be 0.0 to 100.0%, floats are OK
+                                            
+        
+    while not killer.kill_now:
         temp = get_temp()
         duty = get_duty(temp)
         p.ChangeDutyCycle(duty)
@@ -91,3 +110,6 @@ if __name__ == '__main__':
         time.sleep(SLEEP_INTERVAL)
     p.stop()                                # stop the PWM output  
     GPIO.cleanup()                          # when your program exits, tidy up after yourself  
+
+
+
