@@ -81,10 +81,16 @@ def get_duty(temp):
 if __name__ == '__main__':
 
     arguments=len(sys.argv)-1
-    if (arguments !=0 and (sys.argv[1] == '-v')):   # verbouse
-        VERBOUSE = 1
-        
-        
+      
+    for i, arg in enumerate(sys.argv):
+        #print(f"Argument {i:>6}: {arg}")
+        if arg[0:2] == "-v":
+            VERBOUSE = 1
+            print("Verbouse : On")
+        if arg[0:2] == "-t":
+            SLEEP_INTERVAL = float(arg[2:])
+            print ("Interval time :",SLEEP_INTERVAL)
+                    
     killer = GracefulKiller()        
 
     GPIO.setwarnings(False)
