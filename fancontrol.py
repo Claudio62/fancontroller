@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 #
-# use : python3 fancontrol.py [-v]
-# otion -v print out every time slice the duty cycle of the fan, temperature and frequency clock of the CPU
+# use : python3 fancontrol.py [-v] [-tx.x]    ie: python3 fancontrol.py -v -t2.5    
+# option -v print out every time slice the duty cycle of the fan, temperature and frequency clock of the CPU
+# option -tx.x set time interval to check temperature and reset duty cycle [default 5 seconds]
 # you can modify the output pin used for controlling FAN (default 18)
 # time interval of the monitoring feature (default 5 sec)
 #
